@@ -1,0 +1,19 @@
+{
+  "name": "sec5assignment",
+  "version": "1.0.0",
+  "description": "assignSec5",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Ganeshsingh",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "expres": "0.0.5"
+  },
+  "devDependencies": {
+    "express": "^4.17.1"
+  }
+}
