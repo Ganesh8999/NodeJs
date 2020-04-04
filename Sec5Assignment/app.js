@@ -1,5 +1,8 @@
 const express = require("express");
 
+const adminRoutes = require("./routes/admin");
+const shopRoutes = require("./routes/shop");
+
 const app = express();
 
 const bodyParser = require("body-parser");
@@ -23,21 +26,9 @@ const bodyParser = require("body-parser");
 //   res.send("<p> middleware that handles just /</p>");
 // });
 
+app.use(adminRoutes);
+app.use(shopRoutes);
+
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/add-product", (req, res, next) => {
-  res.send(
-    '<form action="/product" method="POST" ><input type="text" name="title"><button type="submit" value="Submit"></form>'
-  );
-});
-
-app.post("/product", (req, res, next) => {
-  console.log(req.body);
-  res.redirect("/");
-});
-
-app.use("/", (req, res, next) => {
-  console.log("In another middleware");
-  res.send("<h1>Hello from Express js</h1>");
-});
 app.listen(3000);
