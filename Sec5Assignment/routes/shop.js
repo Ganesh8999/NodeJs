@@ -13,7 +13,8 @@ router.get("/", (req, res, next) => {
   // for configuring file path
   console.log(adminData.products);
 
-  res.sendFile(path.join(__dirname, "../", "views", "shop.html"));
+  // res.sendFile(path.join(__dirname, "../", "views", "shop.html")); // removed for implementing pug engine
+  res.render("shop.pug");
 });
 
 module.exports = router;

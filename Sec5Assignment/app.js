@@ -1,5 +1,9 @@
 const express = require("express");
 const app = express();
+const path = require("path");
+
+app.set("view engine", "pug");
+app.set("views", "views");
 
 // const rootDir = require("../Sec5Assignment/util");
 const adminData = require("./routes/admin");
