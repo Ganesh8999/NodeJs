@@ -11,7 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
-    "expres": "0.0.5"
+    "ejs": "^3.0.2",
+    "expres": "0.0.5",
+    "express-handlebars": "^4.0.3",
+    "pug": "^2.0.4"
   },
   "devDependencies": {
     "express": "^4.17.1"
