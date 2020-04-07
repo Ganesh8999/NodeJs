@@ -3,8 +3,15 @@ const app = express();
 const path = require("path");
 const expressHbs = require("express-handlebars");
 
-app.engine("handlebars", expressHbs);
-app.set("view engine", "handlebars");
+app.engine(
+  "hbs",
+  expressHbs({
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    extname: "hbs",
+  })
+);
+app.set("view engine", "hbs");
 
 // app.set("view engine", "pug"); // removed to use express-handlebars as template engine
 app.set("views", "views");
