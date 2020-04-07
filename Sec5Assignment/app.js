@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const expressHbs = require("express-handlebars");
 
-app.set("view engine", "pug");
+app.engine("handlebars", expressHbs);
+app.set("view engine", "handlebars");
+
+// app.set("view engine", "pug"); // removed to use express-handlebars as template engine
 app.set("views", "views");
 
 // const rootDir = require("../Sec5Assignment/util");
