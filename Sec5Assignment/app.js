@@ -1,19 +1,23 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const expressHbs = require("express-handlebars");
+// const expressHbs = require("express-handlebars"); // removed for implementing EJS
 
-app.engine(
-  "hbs",
-  expressHbs({
-    layoutsDir: "views/layouts/",
-    defaultLayout: "main-layout",
-    extname: "hbs",
-  })
-);
-app.set("view engine", "hbs");
+// removed for implementing EJS
+// app.engine(
+//   "hbs",
+//   expressHbs({
+//     layoutsDir: "views/layouts/",
+//     defaultLayout: "main-layout",
+//     extname: "hbs",
+//   })
+// );
+
+// app.set("view engine", "hbs"); // removed for implementing EJS
 
 // app.set("view engine", "pug"); // removed to use express-handlebars as template engine
+
+app.set("view engine", "ejs"); // for ejs there is no need of registering the template engine ,just need to set view engine as ejs
 app.set("views", "views");
 
 // const rootDir = require("../Sec5Assignment/util");
