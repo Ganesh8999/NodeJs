@@ -21,7 +21,8 @@ app.set("view engine", "ejs"); // for ejs there is no need of registering the te
 app.set("views", "views");
 
 // const rootDir = require("../Sec5Assignment/util");
-const adminData = require("./routes/admin");
+//const adminData = require("./routes/admin");// changes because of MVC
+const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 const bodyParser = require("body-parser");
@@ -49,7 +50,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, "public")));
 //app.use("/admin", adminRoutes);
-app.use("/admin", adminData.routes);
+// app.use("/admin", adminData.routes);// changes because of MVC
+app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use((req, res, next) => {
   res.status(404).sendFile(path.join(__dirname, "./", "views", "404.html"));
