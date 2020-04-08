@@ -1,3 +1,5 @@
+const products = [];
+
 exports.getAddProduct = (req, res, next) => {
   res.render("add-product", {
     pageTitle: "Add Product",
@@ -14,7 +16,7 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  const products = adminData.products;
+  // const products = adminData.products; // removed to implement controllers
   res.render("shop", {
     prods: products,
     pageTitle: "Shop",
