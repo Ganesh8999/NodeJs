@@ -21,7 +21,11 @@ exports.getProduct = (req, res, next) => {
   const productID = req.params.prodID;
 
   Product.findProductById(productID, (product) => {
-    console.log(product);
+    res.render("shop/product-details", {
+      product: product,
+      pageTitle: product.title,
+      path: "/products",
+    });
   });
   // Product.getProduct((product) => {
   //   res.render("products/" + productID, {
@@ -29,8 +33,6 @@ exports.getProduct = (req, res, next) => {
   //     path: "/" + productID,
   //   });
   // });
-
-  res.redirect("/");
 };
 
 exports.getIndex = (req, res, next) => {
