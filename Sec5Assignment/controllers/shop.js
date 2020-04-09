@@ -19,7 +19,17 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productID = req.params.prodID;
-  console.log(productID);
+
+  Product.findProductById(productID, (product) => {
+    console.log(product);
+  });
+  // Product.getProduct((product) => {
+  //   res.render("products/" + productID, {
+  //     pageTitle: productID,
+  //     path: "/" + productID,
+  //   });
+  // });
+
   res.redirect("/");
 };
 
