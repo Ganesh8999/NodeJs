@@ -18,6 +18,8 @@ router.get("/checkout", shopController.getCheckout);
 
 router.get("/products", shopController.getProducts);
 
+router.get("/products/:prodID", shopController.getProduct);
+
 module.exports = router;
 
 // const express = require("express");

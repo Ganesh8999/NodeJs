@@ -17,6 +17,12 @@ exports.getProducts = (req, res, next) => {
   }); // Added because of models implementation
 };
 
+exports.getProduct = (req, res, next) => {
+  const productID = req.params.prodID;
+  console.log(productID);
+  res.redirect("/");
+};
+
 exports.getIndex = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render("shop/index", {
