@@ -1,6 +1,7 @@
 // const products = []; // removed because of models implementation
 
 const Product = require("../models/product");
+const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
   // const products = adminData.products; // removed to implement controllers
@@ -54,6 +55,16 @@ exports.getCart = (req, res, next) => {
     path: "/cart",
     pageTitle: "Your Cart",
   });
+};
+
+exports.postCart = (req, res, next) => {
+  const productId = req.body.productId;
+  console.log(productId);
+  Product.findProductById(productID, (product) => {
+    Cart.addProduct(productId, product.price);
+  });
+
+  res.redirect("/cart");
 };
 
 exports.getOrders = (req, res, next) => {
