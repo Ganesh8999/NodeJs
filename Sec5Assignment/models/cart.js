@@ -21,21 +21,24 @@ module.exports = class Cart {
   static addProduct(id, productPrice) {
     // fetch the previous products of cart
     fs.readFile(p, (err, fileContent) => {
-      const cart = { products: [], totalPrice: 0 };
+      let cart = { products: [], totalPrice: 0 };
 
       if (!err) {
         cart = JSON.parse(fileContent);
       }
       // analyze the cart => finding the existing product
-      const existingProduct = cart.products.find((prod) => this.prod.id === id);
+      const existingProductIndex = cart.products.find((prod) => prod.id === id);
 
+      const existingProduct = cart.products[existingProductIndex];
       let updatedProduct;
 
       if (existingProduct) {
         updatedProduct = { ...existingProduct };
         updatedProduct.qty = updatedProduct.qty + 1;
+        cart.products = [...cart.products, updatedProduct];
       } else {
         updatedProduct = { id: id, qty: 1 };
+        cart.products = [...cart.products, updatedProduct];
       }
 
       cart.totalPrice = cart.totalPrice + +productPrice;

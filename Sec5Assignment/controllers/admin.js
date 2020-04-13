@@ -30,6 +30,8 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
 
+  console.log(editMode);
+
   const prodId = req.params.productId;
   Product.findProductById(prodId, (product) => {
     if (!product) {
@@ -63,6 +65,7 @@ exports.postEditProduct = (req, res, next) => {
   );
 
   updatedProduct.save();
+  res.redirect("/admin/products");
 };
 
 exports.getProducts = (req, res, next) => {
