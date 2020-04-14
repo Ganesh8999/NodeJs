@@ -49,6 +49,15 @@ exports.getEditProduct = (req, res, next) => {
   });
 };
 
+exports.postDeleteProduct = (req, res, next) => {
+  const productId = req.body.productId;
+  console.log(productId);
+
+  Product.deleteById(productId);
+
+  res.redirect("/admin/products");
+};
+
 exports.postEditProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
