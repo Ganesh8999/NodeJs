@@ -1,18 +1,18 @@
-// const products = []; // removed because of models implementation
-
 const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll()
-    .then((rows) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/product-list", {
-        prods: rows[0],
-        pageTitle: "All Products",
+        prods: products,
         path: "/products",
+        pageTitle: "All products",
       });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -30,15 +30,17 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll()
-    .then((rows, fieldData) => {
+  Product.findAll()
+    .then((products) => {
       res.render("shop/index", {
-        prods: rows[0],
+        prods: products,
         path: "/",
         pageTitle: "Shop",
       });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 exports.getCart = (req, res, next) => {
