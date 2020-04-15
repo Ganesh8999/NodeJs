@@ -4,50 +4,41 @@ const Product = require("../models/product");
 const Cart = require("../models/cart");
 
 exports.getProducts = (req, res, next) => {
-  // const products = adminData.products; // removed to implement controllers
-  Product.fetchAll((products) => {
-    res.render("shop/product-list", {
-      prods: products,
-      pageTitle: "All Products",
-      path: "/products",
-      // removed it was needed for handlebars code but now there is no need in EJS
-      // hasProducts: products.length > 0,
-      // activeShop: true,
-      // productCSS: true,
-    });
-  }); // Added because of models implementation
+  Product.fetchAll()
+    .then((rows) => {
+      res.render("shop/product-list", {
+        prods: rows[0],
+        pageTitle: "All Products",
+        path: "/products",
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getProduct = (req, res, next) => {
   const productID = req.params.prodID;
 
-  Product.findProductById(productID, (product) => {
-    res.render("shop/product-details", {
-      product: product,
-      pageTitle: product.title,
-      path: "/products",
-    });
-  });
-  // Product.getProduct((product) => {
-  //   res.render("products/" + productID, {
-  //     pageTitle: productID,
-  //     path: "/" + productID,
-  //   });
-  // });
+  Product.findProductById(productID)
+    .then(([product]) => {
+      res.render("shop/product-details", {
+        product: product[0],
+        pageTitle: product.title,
+        path: "/products",
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("shop/index", {
-      prods: products,
-      path: "/",
-      pageTitle: "Shop",
-      // removed it was needed for handlebars code but now there is no need in EJS
-      // hasProducts: products.length > 0,
-      // activeShop: true,
-      // productCSS: true,
-    });
-  });
+  Product.fetchAll()
+    .then((rows, fieldData) => {
+      res.render("shop/index", {
+        prods: rows[0],
+        path: "/",
+        pageTitle: "Shop",
+      });
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getCart = (req, res, next) => {

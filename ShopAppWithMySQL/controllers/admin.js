@@ -4,7 +4,7 @@ exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
     pageTitle: "Add Product",
     path: "/admin/add-product",
-    editing: true,
+    editing: false,
     formsCSS: true,
     productCSS: true,
     activeAddProduct: true,
@@ -12,16 +12,19 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-  // products.push({ title: req.body.title }); // removed because of models implementation
-
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
 
   const product = new Product(null, title, imageUrl, price, description);
-  product.save();
-  res.redirect("/");
+
+  product
+    .save()
+    .then(() => {
+      res.redirect("/");
+    })
+    .catch((error) => console.log(error));
 };
 
 exports.getEditProduct = (req, res, next) => {
