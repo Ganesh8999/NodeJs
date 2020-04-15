@@ -17,16 +17,30 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productID = req.params.prodID;
-
-  Product.findProductById(productID)
-    .then(([product]) => {
+  // Alternative way by using findAll()
+  Product.findAll({ where: { id: productID } })
+    .then((products) => {
       res.render("shop/product-details", {
-        product: product[0],
-        pageTitle: product.title,
+        product: products[0],
+        pageTitle: products[0].title,
         path: "/products",
       });
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      console.log(error);
+    });
+
+  // By using findByPk()
+
+  // Product.findByPk(productID)
+  //   .then((product) => {
+  //     res.render("shop/product-details", {
+  //       product: product,
+  //       pageTitle: product.title,
+  //       path: "/products",
+  //     });
+  //   })
+  //   .catch((error) => console.log(error));
 };
 
 exports.getIndex = (req, res, next) => {
