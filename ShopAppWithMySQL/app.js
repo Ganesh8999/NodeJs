@@ -4,6 +4,8 @@ const errorController = require("./controllers/error");
 
 const Product = require("./models/product");
 const User = require("./models/user");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cart-item");
 
 const sequelize = require("./util/dbSequelize");
 
@@ -29,13 +31,18 @@ app.use((req, res, next) => {
 });
 Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 User.hasMany(Product);
+User.hasOne(Cart);
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
+Product.belongsToMany(Cart, { through: CartItem });
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404);
 
 sequelize
-  .sync() //  .sync({ force: true }) if you want to force to override the already available table
+  // .sync() //
+  .sync({ force: true }) //if you want to force to override the already available table
   .then((result) => {
     //console.log(result);
     return User.findByPk(1);
