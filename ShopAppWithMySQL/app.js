@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 const errorController = require("./controllers/error");
 
+const Product = require("./models/product");
+const User = require("./models/user");
+
 const sequelize = require("./util/dbSequelize");
 
 app.set("view engine", "ejs"); // for ejs there is no need of registering the template engine ,just need to set view engine as ejs
@@ -20,8 +23,11 @@ app.use(shopRoutes);
 
 app.use(errorController.get404);
 
+Product.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
+User.hasMany(Product);
+
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     //console.log(result);
 
