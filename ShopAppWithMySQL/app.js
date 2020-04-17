@@ -47,7 +47,7 @@ app.use(errorController.get404);
 // .sync({ force: true }) // if you want to force to override the already available table
 
 sequelize
-  .sync({ force: true })
+  .sync()
   .then((result) => {
     //console.log(result);
     return User.findByPk(1);
