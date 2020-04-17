@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const path = require("path");
+const path = require("path");54
+const db = require('./util/db')
 
 const errorController = require("./controllers/error");
 // const expressHbs = require("express-handlebars"); // removed for implementing EJS
@@ -28,6 +29,15 @@ const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 
 const bodyParser = require("body-parser");
+
+db.execute('SELECT * FROM products').then(result=>{
+    console.log(result[0],result[1]);
+}).catch(error =>{
+    console.log(error);
+
+
+
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
