@@ -40,22 +40,29 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(errorController.get404);
 
+// .sync({ force: true }) // if you want to force to override the already available table
+
 sequelize
-  // .sync() //
-  .sync({ force: true }) //if you want to force to override the already available table
+  .sync()
   .then((result) => {
     //console.log(result);
     return User.findByPk(1);
   })
   .then((user) => {
     if (!user) {
-      User.create({ name: "Ganesh Singh", email: "singhganesh571@gmail.com" });
+      return User.create({
+        name: "Ganesh Singh",
+        email: "singhganesh571@gmail.com",
+      });
     }
 
     return user;
   })
   .then((user) => {
-    console.log(user);
+    //console.log(user);
+    return user.createCart();
+  })
+  .then((cart) => {
     app.listen(3000);
   })
   .catch((err) => {
