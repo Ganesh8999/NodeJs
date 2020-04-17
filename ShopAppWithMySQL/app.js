@@ -6,7 +6,8 @@ const Product = require("./models/product");
 const User = require("./models/user");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cart-item");
-
+const Order = require("./models/order");
+const OrderItem = require("./models/order-item");
 const sequelize = require("./util/dbSequelize");
 
 app.set("view engine", "ejs"); // for ejs there is no need of registering the template engine ,just need to set view engine as ejs
@@ -35,6 +36,9 @@ User.hasOne(Cart);
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 Product.belongsToMany(Cart, { through: CartItem });
+Order.belongsTo(User);
+User.hasMany(Order);
+Order.belongsToMany(Product, { through: OrderItem });
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -43,7 +47,7 @@ app.use(errorController.get404);
 // .sync({ force: true }) // if you want to force to override the already available table
 
 sequelize
-  .sync()
+  .sync({ force: true })
   .then((result) => {
     //console.log(result);
     return User.findByPk(1);
