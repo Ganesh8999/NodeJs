@@ -14,21 +14,20 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-// exports.getProduct = (req, res, next) => {
-//   const productID = req.params.prodID;
-//   // Alternative way by using findAll()
-//   Product.findAll({ where: { id: productID } })
-//     .then((products) => {
-//       res.render("shop/product-details", {
-//         product: products[0],
-//         pageTitle: products[0].title,
-//         path: "/products",
-//       });
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-
+exports.getProduct = (req, res, next) => {
+  const productID = req.params.prodID;
+  Product.findById(productID)
+    .then((products) => {
+      res.render("shop/product-details", {
+        product: products,
+        pageTitle: products.title,
+        path: "/products",
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 // By using findByPk()
 
 // Product.findByPk(productID)
@@ -184,4 +183,4 @@ exports.getIndex = (req, res, next) => {
 //     path: "/checkout",
 //     pageTitle: "Checkout",
 //   });
-// };
+//
