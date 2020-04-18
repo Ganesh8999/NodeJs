@@ -1,4 +1,5 @@
 const mongodb = require("mongodb");
+let _db;
 
 const mongoConnect = (callback) => {
   const MongoClient = mongodb.MongoClient;

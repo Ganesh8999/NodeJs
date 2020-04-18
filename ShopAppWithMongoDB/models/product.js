@@ -8,31 +8,34 @@ class Product {
     this.imageUrl = imageUrl;
   }
 
-  save() {}
+  save() {
+    const db = getDb();
+    return db
+      .collection("products")
+      .insertOne(this)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    //db.collection("products").insertOne({ name: "A book", price: 12.99 });
+  }
+
+  static fetchAll() {
+    const db = getDb();
+    return db
+      .collection("products")
+      .find()
+      .toArray()
+      .then((products) => {
+        return products;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
-
-const Product = sequelize.define("product", {
-  id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-  },
-  title: Sequelize.STRING,
-  price: {
-    type: Sequelize.DOUBLE,
-    allowNull: false,
-  },
-  imageUrl: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  description: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-});
-
 module.exports = Product;
 // commented because of Sequelize implementation
 // const db = require("../util/db");
