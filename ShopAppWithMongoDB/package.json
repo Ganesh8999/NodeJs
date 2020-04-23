@@ -1,0 +1,25 @@
+{
+  "name": "shopAppWithMongoDB",
+  "version": "1.0.0",
+  "description": "ShopAppWithMongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Ganesh Singh",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.2",
+    "expres": "0.0.5",
+    "express-handlebars": "^3.0.2",
+    "mongodb": "^3.5.6",
+    "mysql2": "^2.1.0",
+    "pug": "^2.0.4"
+  },
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.3"
+  }
+}
