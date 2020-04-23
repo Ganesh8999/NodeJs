@@ -33,7 +33,7 @@ app.use(errorController.get404);
 mongoose
   .connect(
     "mongodb://nodeg:nodeg@mongoatlascluster-shard-00-00-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-01-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-02-4ebqp.gcp.mongodb.net:27017/shop?ssl=true&replicaSet=MongoAtlasCluster-shard-0&authSource=admin&retryWrites=true&w=majority",
-    { useUnifiedTopology: true }
+    { useUnifiedTopology: true, useNewUrlParser: true }
   )
   .then((result) => {
     app.listen(3000);
