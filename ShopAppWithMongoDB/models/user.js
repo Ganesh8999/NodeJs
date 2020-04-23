@@ -39,6 +39,33 @@ class User {
       }
     );
   }
+
+  getCart() {
+    // this is possible to return cart directly but commented because to implement more details about the product; we will use more logic
+    //   return this.cart; // getCart() exist on every user; this is the mongodb way of thinking :) That's it !!
+
+    const db = getDb();
+
+    // array of products Ids from cart
+    const productIds = this.cart.items.map((i) => {
+      return i.productId;
+    });
+    return db
+      .collection("products")
+      .find({ _id: { $in: productIds } })
+      .toArray()
+      .then((products) => {
+        return products.map((p) => {
+          return {
+            ...p,
+            quantity: this.cart.items.find((i) => {
+              return i.productId.toString() === p._id.toString();
+            }).quantity,
+          };
+        });
+      });
+  }
+
   static save() {
     const db = getDb();
     db.collection("user").insertOne(this);
