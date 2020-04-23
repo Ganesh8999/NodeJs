@@ -1,112 +1,136 @@
-const mongodb = require("mongodb");
-const getDb = require("../util/db").getDb;
-class Product {
-  constructor(title, price, description, imageUrl, id, userId) {
-    this.title = title;
-    this.price = price;
-    this.description = description;
-    this.imageUrl = imageUrl;
-    this._id = id ? new mongodb.ObjectId(id) : null;
-    this.userId = userId;
-  }
+const mongoose = require("mongoose");
 
-  save() {
-    const db = getDb();
+const Schema = mongoose.Schema;
 
-    let dbOperation;
-    if (this._id) {
-      // update the product
-      dbOperation = db
-        .collection("products")
-        .updateOne({ _id: this._id }, { $set: this }); // To update entire object can use "" this ""
-      // we can update particular value like below
-      // .updateOne({ _id: new mongodb.ObjectId(this._id) }, { this.title, this.price = price,this.description = description,this.imageUrl = imageUrl });
-    } else {
-      dbOperation = db.collection("products").insertOne(this);
-    }
-    return dbOperation
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    //db.collection("products").insertOne({ name: "A book", price: 12.99 });
-  }
+const productSchema = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
+});
 
-  static fetchAll() {
-    const db = getDb();
-    return db
-      .collection("products")
-      .find()
-      .toArray()
-      .then((products) => {
-        return products;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+module.exports = mongoose.model("Product", productSchema);
 
-  static findById(prodId) {
-    const db = getDb();
-    return db
-      .collection("products")
-      .find({ _id: new mongodb.ObjectId(prodId) })
-      .next()
-      .then((product) => {
-        console.log(product);
-        return product;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  static deleteById(prodId) {
-    const db = getDb();
-
-    return db
-      .collection("products")
-      .deleteOne({ _id: new mongodb.ObjectId(prodId) })
-      .then((result) => {
-        console.log("Product deleted !!");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
-module.exports = Product;
-// commented because of Sequelize implementation
-// const db = require("../util/db");
-
-// const Cart = require("./cart");
-
-// module.exports = class Product {
-//   constructor(id, title, imageUrl, price, description) {
-//     this.id = id;
+// const mongodb = require("mongodb");
+// class Product {
+//   constructor(title, price, description, imageUrl, id, userId) {
 //     this.title = title;
-//     this.imageUrl = imageUrl;
-//     this.description = description;
 //     this.price = price;
+//     this.description = description;
+//     this.imageUrl = imageUrl;
+//     this._id = id ? new mongodb.ObjectId(id) : null;
+//     this.userId = userId;
 //   }
 
-//   static deleteById(id) {}
-
 //   save() {
-//     return db.execute(
-//       "INSERT INTO PRODUCTS (title,price,description,imageUrl) VALUES (?,?,?,?)",
+//     const db = getDb();
 
-//       [this.title, this.price, this.description, this.imageUrl]
-//     );
+//     let dbOperation;
+//     if (this._id) {
+//       // update the product
+//       dbOperation = db
+//         .collection("products")
+//         .updateOne({ _id: this._id }, { $set: this }); // To update entire object can use "" this ""
+//       // we can update particular value like below
+//       // .updateOne({ _id: new mongodb.ObjectId(this._id) }, { this.title, this.price = price,this.description = description,this.imageUrl = imageUrl });
+//     } else {
+//       dbOperation = db.collection("products").insertOne(this);
+//     }
+//     return dbOperation
+//       .then((result) => {
+//         console.log(result);
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//     //db.collection("products").insertOne({ name: "A book", price: 12.99 });
 //   }
 
 //   static fetchAll() {
-//     return db.execute("SELECT * FROM PRODUCTS");
+//     const db = getDb();
+//     return db
+//       .collection("products")
+//       .find()
+//       .toArray()
+//       .then((products) => {
+//         return products;
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
 //   }
 
-//   static findProductById(id) {
-//     return db.execute("SELECT * FROM products WHERE products.id =?", [id]);
+//   static findById(prodId) {
+//     const db = getDb();
+//     return db
+//       .collection("products")
+//       .find({ _id: new mongodb.ObjectId(prodId) })
+//       .next()
+//       .then((product) => {
+//         console.log(product);
+//         return product;
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
 //   }
-// };
+
+//   static deleteById(prodId) {
+//     const db = getDb();
+
+//     return db
+//       .collection("products")
+//       .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+//       .then((result) => {
+//         console.log("Product deleted !!");
+//       })
+//       .catch((err) => {
+//         console.log(err);
+//       });
+//   }
+// }
+// module.exports = Product;
+// // commented because of Sequelize implementation
+// // const db = require("../util/db");
+
+// // const Cart = require("./cart");
+
+// // module.exports = class Product {
+// //   constructor(id, title, imageUrl, price, description) {
+// //     this.id = id;
+// //     this.title = title;
+// //     this.imageUrl = imageUrl;
+// //     this.description = description;
+// //     this.price = price;
+// //   }
+
+// //   static deleteById(id) {}
+
+// //   save() {
+// //     return db.execute(
+// //       "INSERT INTO PRODUCTS (title,price,description,imageUrl) VALUES (?,?,?,?)",
+
+// //       [this.title, this.price, this.description, this.imageUrl]
+// //     );
+// //   }
+
+// //   static fetchAll() {
+// //     return db.execute("SELECT * FROM PRODUCTS");
+// //   }
+
+// //   static findProductById(id) {
+// //     return db.execute("SELECT * FROM products WHERE products.id =?", [id]);
+// //   }
+// // };
