@@ -15,16 +15,16 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use((req, res, next) => {
-//   User.findById("5ea13530ec1339404f386beb")
-//     .then((user) => {
-//       req.user = new User(user.name, user.email, user.cart, user._id);
-//       next();
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// });
+app.use((req, res, next) => {
+  User.findById("5ea3d767957f151e38ea7935")
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
@@ -36,6 +36,19 @@ mongoose
     { useUnifiedTopology: true, useNewUrlParser: true }
   )
   .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          username: "Ganesh Singh",
+          email: "singhganesh571@gmail.com",
+          cart: {
+            items: [],
+          },
+        });
+      }
+      user.save();
+    });
+
     app.listen(3000);
     console.log(result);
   })
