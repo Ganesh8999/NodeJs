@@ -12,6 +12,7 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
+  console.log("request user check " + req.user);
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
@@ -21,14 +22,13 @@ exports.postAddProduct = (req, res, next) => {
     title: title,
     price: price,
     description: description,
-    imageUrl: description,
     imageUrl: imageUrl,
+    userId: req.user,
   });
 
   product
     .save()
     .then((result) => {
-      console.log(result);
       console.log("Product created!");
       res.redirect("/products");
     })

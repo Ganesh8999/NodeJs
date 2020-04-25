@@ -16,7 +16,7 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
-  User.findById("5ea3d767957f151e38ea7935")
+  User.findById("5ea3eb951ff28231d01dc048")
     .then((user) => {
       req.user = user;
       next();
@@ -45,12 +45,10 @@ mongoose
             items: [],
           },
         });
+        user.save();
       }
-      user.save();
     });
-
     app.listen(3000);
-    console.log(result);
   })
   .catch((err) => {
     console.log(err);
