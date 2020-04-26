@@ -7,6 +7,7 @@ app.set("view engine", "ejs"); // for ejs there is no need of registering the te
 app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
 
 const bodyParser = require("body-parser");
 app.use(express.static(__dirname + "/public"));
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoConnect(() => {
