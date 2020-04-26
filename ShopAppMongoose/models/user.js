@@ -25,6 +25,12 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.methods.clearCart = function () {
+  this.cart = { items: [] };
+
+  return this.save();
+};
+
 userSchema.methods.addProductToCart = function (product) {
   const cartProductIndex = this.cart.items.findIndex((cp) => {
     return cp.productId.toString() === product._id.toString();
@@ -50,7 +56,7 @@ userSchema.methods.addProductToCart = function (product) {
   return this.save();
 };
 
-userSchema.methods.deleteItemFromCart = function (productId) {
+userSchema.methods.removeFromCart = function (productId) {
   const updatedCartItems = this.cart.items.filter((item) => {
     return item.productId.toString() !== productId.toString();
   });
