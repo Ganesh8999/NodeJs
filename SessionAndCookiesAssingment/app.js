@@ -36,6 +36,17 @@ app.use(
   })
 );
 
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
@@ -48,8 +59,8 @@ mongoose
     User.findOne().then((user) => {
       if (!user) {
         const user = new User({
-          name: "Max",
-          email: "max@test.com",
+          username: "Ganesh Singhh",
+          email: "singhganesh@test.com",
           cart: {
             items: [],
           },
