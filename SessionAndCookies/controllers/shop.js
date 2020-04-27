@@ -7,6 +7,7 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         path: "/products",
         pageTitle: "All products",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((error) => {
@@ -22,6 +23,7 @@ exports.getProduct = (req, res, next) => {
         product: products,
         pageTitle: products.title,
         path: "/products",
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((error) => {
@@ -48,7 +50,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         path: "/",
         pageTitle: "Shop",
-        isAuthenticated: true,
+        isAuthenticated: req.session.isLoggedIn,
       });
     })
     .catch((error) => {
