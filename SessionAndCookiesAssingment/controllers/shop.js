@@ -66,11 +66,16 @@ exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findById(prodId)
     .then((product) => {
+      console.log(req.user);
+
       return req.user.addToCart(product);
     })
     .then((result) => {
       console.log(result);
       res.redirect("/cart");
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
