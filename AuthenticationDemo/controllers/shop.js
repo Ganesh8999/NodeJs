@@ -10,6 +10,7 @@ exports.getProducts = (req, res, next) => {
         pageTitle: "All Products",
         path: "/products",
         isAuthenticated: req.session.isLoggedIn,
+        csrfToken: req.csrfToken(),
       });
     })
     .catch((err) => {
@@ -39,6 +40,7 @@ exports.getIndex = (req, res, next) => {
         pageTitle: "Shop",
         path: "/",
         isAuthenticated: req.session.isLoggedIn,
+        csrfToken: req.csrfToken(),
       });
     })
     .catch((err) => {

@@ -8,6 +8,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
+const csurf = require("csurf");
 
 const MONGODB_URI =
   "mongodb://nodeg:nodeg@mongoatlascluster-shard-00-00-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-01-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-02-4ebqp.gcp.mongodb.net:27017/shop?ssl=true&replicaSet=MongoAtlasCluster-shard-0&authSource=admin&retryWrites=true&w=majority";
@@ -17,6 +18,8 @@ const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
 });
+
+const csurfProtection = csurf({});
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -35,6 +38,8 @@ app.use(
     store: store,
   })
 );
+
+app.use(csurfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
