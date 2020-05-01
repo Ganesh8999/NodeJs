@@ -8,7 +8,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 
 const errorController = require("./controllers/error");
 const User = require("./models/user");
-const csurf = require("csurf");
+const csrf = require("csurf");
 
 const MONGODB_URI =
   "mongodb://nodeg:nodeg@mongoatlascluster-shard-00-00-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-01-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-02-4ebqp.gcp.mongodb.net:27017/shop?ssl=true&replicaSet=MongoAtlasCluster-shard-0&authSource=admin&retryWrites=true&w=majority";
@@ -19,7 +19,7 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-const csurfProtection = csurf({});
+const csrfProtection = csrf();
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -39,12 +39,13 @@ app.use(
   })
 );
 
-app.use(csurfProtection);
+app.use(csrfProtection);
 
 app.use((req, res, next) => {
   if (!req.session.user) {
     return next();
   }
+
   User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
@@ -52,6 +53,13 @@ app.use((req, res, next) => {
     })
     .catch((err) => console.log(err));
 });
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
