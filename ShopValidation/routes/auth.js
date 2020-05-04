@@ -14,6 +14,7 @@ router.post(
   [
     body("email")
       .isEmail()
+      .normalizeEmail()
       .withMessage("Please enter valid email !!")
       .custom((value, { req }) => {
         return User.findOne({ email: value }).then((user) => {
@@ -29,7 +30,8 @@ router.post(
       "please enter the password with only numbers and text and at least 2 characters !!"
     )
       .isLength({ min: 2 })
-      .isAlphanumeric(),
+      .isAlphanumeric()
+      .trim(),
   ],
   authController.postLogin
 );
@@ -44,6 +46,7 @@ router.post(
     check("email")
       .isEmail()
       .withMessage("Please enter valid email !!")
+      .normalizeEmail()
       .custom((value, { req }) => {
         // This is first way
         // if (value === "singhganesh571@gmail.com") {
@@ -65,14 +68,17 @@ router.post(
       "please enter the password with only numbers and text and at least 2 characters !!"
     )
       .isLength({ min: 2 })
-      .isAlphanumeric(),
+      .isAlphanumeric()
+      .trim(),
 
-    body("confirmPassword").custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Password need to match !!!");
-      }
-      return true;
-    }),
+    body("confirmPassword")
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Password need to match !!!");
+        }
+        return true;
+      }),
   ],
   authController.postSignup
 );
