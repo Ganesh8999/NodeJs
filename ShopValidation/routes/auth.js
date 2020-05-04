@@ -1,6 +1,7 @@
 const express = require("express");
 
 const authController = require("../controllers/auth");
+const User = require("../models/user");
 
 const { check, body } = require("express-validator");
 
@@ -8,7 +9,30 @@ const router = express.Router();
 
 router.get("/login", authController.getLogin);
 
-router.post("/login", authController.postLogin);
+router.post(
+  "/login",
+  [
+    body("email")
+      .isEmail()
+      .withMessage("Please enter valid email !!")
+      .custom((value, { req }) => {
+        return User.findOne({ email: value }).then((user) => {
+          if (!user) {
+            return Promise.reject(
+              "user with this email id is not regd. maybe email or password is wrong !!"
+            );
+          }
+        });
+      }),
+    body(
+      "password",
+      "please enter the password with only numbers and text and at least 2 characters !!"
+    )
+      .isLength({ min: 2 })
+      .isAlphanumeric(),
+  ],
+  authController.postLogin
+);
 
 router.post("/logout", authController.postLogout);
 
@@ -21,10 +45,19 @@ router.post(
       .isEmail()
       .withMessage("Please enter valid email !!")
       .custom((value, { req }) => {
-        if (value === "singhganesh571@gmail.com") {
-          throw new Error("Sorry !! This email is forbidden !!");
-        }
-        return true;
+        // This is first way
+        // if (value === "singhganesh571@gmail.com") {
+        //   throw new Error("Sorry !! This email is forbidden !!");
+        // }
+        // return true;
+
+        // This is second way
+
+        return User.findOne({ email: value }).then((user) => {
+          if (user) {
+            return Promise.reject("Email has been already used !!");
+          }
+        });
       }),
 
     body(
