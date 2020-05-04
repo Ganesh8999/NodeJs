@@ -1,16 +1,6 @@
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/user");
-// # Include the Sendinblue library\
-var SibApiV3Sdk = require("sib-api-v3-sdk");
-var defaultClient = SibApiV3Sdk.ApiClient.instance;
-
-// # Instantiate the client\
-var apiKey = defaultClient.authentications["api-key"];
-apiKey.apiKey =
-  "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";
-//# Create a campaign\
-//# ------------------
 
 exports.getLogin = (req, res, next) => {
   console.log(req.flash("error"));
@@ -104,41 +94,7 @@ exports.postSignup = (req, res, next) => {
           return user.save();
         })
         .then((result) => {
-          var apiInstance = new SibApiV3Sdk.EmailCampaignsApi();
-          var emailCampaigns = new SibApiV3Sdk.CreateEmailCampaign();
-
-          //  # Define the campaign settings\
-          emailCampaigns.name = "Campaign sent via the API";
-          emailCampaigns.subject = "My subject";
-          emailCampaigns.sender = {
-            name: "Ganesh Singh",
-            email: "singhganesh571@gmail.com",
-          };
-          emailCampaigns.type = "classic";
-
-          //  # Content that will be sent\
-          htmlContent: "Congratulations! You successfully sent this example campaign via the Sendinblue API.";
-
-          // # Select the recipients\
-          recipients: {
-            listIds: ["singhganeh571@gmail.com"];
-          }
-
-          // # Schedule the sending in one hour\
-          scheduledAt: "2020-05-02 12:54:00";
-
-          //  # Make the call to the client\
-          apiInstance.createEmailCampaign(emailCampaigns).then(
-            function (data) {
-              console.log("API called successfully. Returned data: " + data);
-            },
-            function (error) {
-              console.error(error);
-            }
-          );
-        })
-        .catch((err) => {
-          console.log(err);
+          res.redirect("/login");
         });
     })
     .catch((err) => {
