@@ -58,7 +58,7 @@ exports.postLogin = (req, res, next) => {
     return res.status(422).render("auth/login", {
       path: "/login",
       pageTitle: "Login",
-      errorMessage: errors.array()[0].msg,
+      errorMessage: "Invalid email or wrong password !!",
       oldInput: {
         email: email,
         password: password,
@@ -70,9 +70,16 @@ exports.postLogin = (req, res, next) => {
   User.findOne({ email: email })
     .then((user) => {
       if (!user) {
-        req.flash("error", "Invalid email or wrong password !!");
-        return req.session.save((err) => {
-          res.redirect("/login");
+        return res.status(422).render("auth/login", {
+          path: "/login",
+          pageTitle: "Login",
+          errorMessage: "Invalid email or wrong password !!",
+          oldInput: {
+            email: email,
+            password: password,
+          },
+          validationErrors: [{ param: "email", param: "password" }],
+          // validationErrors: [{ param: "email", param: "password" }],
         });
       }
       bcrypt
@@ -86,7 +93,17 @@ exports.postLogin = (req, res, next) => {
               res.redirect("/");
             });
           }
-          res.redirect("/login");
+          return res.status(422).render("auth/login", {
+            path: "/login",
+            pageTitle: "Login",
+            errorMessage: "Invalid email or wrong password !!",
+            oldInput: {
+              email: email,
+              password: password,
+            },
+            validationErrors: [{ param: "email", param: "password" }],
+            // validationErrors: [{ param: "email", param: "password" }],
+          });
         })
         .catch((err) => {
           console.log(err);
