@@ -10,6 +10,28 @@ const errorController = require("./controllers/error");
 const User = require("./models/user");
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const multer = require("multer");
+
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, new Date().getTime() + "-" + file.originalname);
+  },
+});
+
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
+};
 
 const MONGODB_URI =
   "mongodb://nodeg:nodeg@mongoatlascluster-shard-00-00-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-01-4ebqp.gcp.mongodb.net:27017,mongoatlascluster-shard-00-02-4ebqp.gcp.mongodb.net:27017/shop?ssl=true&replicaSet=MongoAtlasCluster-shard-0&authSource=admin&retryWrites=true&w=majority";
@@ -30,7 +52,15 @@ const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  multer({
+    dest: "images",
+    storage: fileStorage,
+    fileFilter: fileFilter,
+  }).single("image")
+);
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "my secret",
@@ -42,12 +72,6 @@ app.use(
 
 app.use(csrfProtection);
 app.use(flash()); // should be use after initializing sessions
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
 
 app.use((req, res, next) => {
   // throw new Error("dummy dummy");
@@ -68,6 +92,12 @@ app.use((req, res, next) => {
       // throw new Error(err);
       next(new Error(err));
     });
+});
+
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use("/admin", adminRoutes);
