@@ -44,12 +44,20 @@ app.use(csrfProtection);
 app.use(flash()); // should be use after initializing sessions
 
 app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  next();
+});
+
+app.use((req, res, next) => {
+  // throw new Error("dummy dummy");
   if (!req.session.user) {
     return next();
   }
 
   User.findById(req.session.user._id)
     .then((user) => {
+      // throw new Error("dummy dummy");
       if (!user) {
         return next();
       }
@@ -57,14 +65,9 @@ app.use((req, res, next) => {
       next();
     })
     .catch((err) => {
-      throw new Error(err);
+      // throw new Error(err);
+      next(new Error(err));
     });
-});
-
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isLoggedIn;
-  res.locals.csrfToken = req.csrfToken();
-  next();
 });
 
 app.use("/admin", adminRoutes);
@@ -77,9 +80,16 @@ app.use(errorController.get404);
 
 // If multiple error handlers then they will execute top to bottom like other middleware
 app.use((error, req, res, next) => {
+  // 1st way
   //  res.status(error.httpStatusCode).render('/....') // this can be possible
-
-  res.redirect("/500");
+  // 2nd way but fails because if error thrown outside then() and code goes into infinite loop
+  // res.redirect("/500");
+  // 3rd way
+  res.status(500).render("500", {
+    pageTitle: "Error !!",
+    path: "/500",
+    isAuthenticated: req.session.isLoggedIn,
+  });
 });
 
 mongoose
