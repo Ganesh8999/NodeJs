@@ -7,8 +7,7 @@ var defaultClient = SibApiV3Sdk.ApiClient.instance;
 
 // # Instantiate the client\
 var apiKey = defaultClient.authentications["api-key"];
-apiKey.apiKey =
-  "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";
+apiKey.apiKey = "Here add api key";
 //# Create a campaign\
 //# ------------------
 
