@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const mongoose = require("mongoose");
 
 const { validationResult } = require("express-validator");
 
@@ -28,7 +29,7 @@ exports.postAddProduct = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).render("admin/edit-product", {
       pageTitle: "Add Product",
-      path: "/admin/edit-product",
+      path: "/admin/add-product",
       editing: false,
       hasError: true,
       product: {
@@ -42,6 +43,7 @@ exports.postAddProduct = (req, res, next) => {
     });
   }
   const product = new Product({
+    _id: new mongoose.Types.ObjectId("5ead24d134187540dc0a4dac"),
     title: title,
     price: price,
     description: description,
@@ -57,6 +59,32 @@ exports.postAddProduct = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+
+      //This solution for if there is serious problem
+      // res.redirect("/500");
+
+      // This can used for small problem we can send try again message for end user
+      // return res.status(500).render("admin/edit-product", {
+      //   pageTitle: "Add Product",
+      //   path: "/admin/add-product",
+      //   editing: false,
+      //   hasError: true,
+      //   product: {
+      //     title: title,
+      //     price: price,
+      //     description: description,
+      //     imageUrl: imageUrl,
+      //   },
+      //   errorMessage: "Database error Please try again !!!",
+      //   validationErrors: [],
+      // });
+
+      // Third way
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+
+      // whenever we are calling next(error) it will leave exe other middleware and node js will exe this middleware
+      return next(error);
     });
 };
 
@@ -83,7 +111,11 @@ exports.getEditProduct = (req, res, next) => {
         validationErrors: [],
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
