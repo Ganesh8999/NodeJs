@@ -18,6 +18,8 @@ router.get("/cart", checkAuth, shopController.getCart);
 
 router.post("/cart", checkAuth, shopController.postCart);
 
+router.get("/orders/:orderId", checkAuth, shopController.getInvoice);
+
 router.post(
   "/cart-delete-item",
   checkAuth,
