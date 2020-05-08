@@ -10,6 +10,8 @@ const router = express.Router();
 
 const checkAuth = require("../middleware/check-auth");
 
+const deleteProduct = require("../public/js/admin");
+
 // /admin/add-product => GET
 router.get("/add-product", checkAuth, adminController.getAddProduct);
 
@@ -59,6 +61,8 @@ router.post(
   adminController.postEditProduct
 );
 
-router.post("/delete-product", adminController.postDeleteProduct);
+// For understanding Async requests
+// router.post("/delete-product", adminController.postDeleteProduct);
+router.delete("/product/:productId", checkAuth, adminController.deleteProduct);
 
 module.exports = router;
