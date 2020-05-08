@@ -115,6 +115,9 @@ app.use((error, req, res, next) => {
   // 2nd way but fails because if error thrown outside then() and code goes into infinite loop
   // res.redirect("/500");
   // 3rd way
+
+  console.log(error);
+
   res.status(500).render("500", {
     pageTitle: "Error !!",
     path: "/500",
