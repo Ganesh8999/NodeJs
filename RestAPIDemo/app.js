@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const feedRoutes = require("./routes/feed");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
 // app.use(bodyParser.urlencoded()) // x-www-form-urlencoded <form>
 
