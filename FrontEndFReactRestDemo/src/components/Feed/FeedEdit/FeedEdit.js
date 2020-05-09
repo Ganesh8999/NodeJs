@@ -125,6 +125,8 @@ class FeedEdit extends Component {
       image: this.state.postForm.image.value,
       content: this.state.postForm.content.value,
     };
+    console.log("my post" + post);
+
     this.props.onFinishEdit(post);
     this.setState({
       postForm: POST_FORM,
