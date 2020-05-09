@@ -3,30 +3,30 @@ const { validationResult } = require("express-validator");
 const Post = require("../models/post");
 
 exports.getPosts = (req, res, next) => {
-  res.json({
-    posts: [
-      {
-        _id: "1",
-        title: "My Posts",
-        content: "This posts is very cool!!!",
-        imageUrl: "images/avengers.jpg",
-        creator: {
-          name: "Ganesh Singh",
-        },
-        createdAt: new Date(),
-      },
-    ],
-  });
+  Post.find()
+    .then((posts) => {
+      res.status(200).json({ message: "all posts fetched ", posts: posts });
+    })
+    .catch((error) => {
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+  // res.json({
+  //   posts: posts,
+  // });
 };
 
 exports.postPost = (req, res, next) => {
-  // const errors = validationResult(req);
+  const errors = validationResult(req);
   // if (!errors.isEmpty()) {
-  //   return res.status(422).json({
-  //     message: "Validation failed",
-  //     error: errors.array(),
-  //   });
+  //   const error = new Error("validation failed, entered data is incorrect");
+  //   error.statusCode = 422;
+  //   throw error;
   // }
+
+  console.log("postPost" + req.body.title);
   const title = req.body.title;
   const content = req.body.content;
   console.log("content" + content);
@@ -50,6 +50,39 @@ exports.postPost = (req, res, next) => {
       });
     })
     .catch((error) => {
+      // console.log(error);
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
+    });
+};
+
+exports.getPost = (req, res, next) => {
+  const postId = req.params.postId;
+  console.log(postId);
+
+  Post.findById(postId)
+    .then((post) => {
+      console.log("my post " + post);
+
+      if (!post) {
+        const error = new Error("This  post is not available");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      res.status(200).json({
+        message: "Post fetched !!!",
+        post: post,
+      });
+    })
+    .catch((error) => {
       console.log(error);
+
+      if (!error.statusCode) {
+        error.statusCode = 500;
+      }
+      next(error);
     });
 };
