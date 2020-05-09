@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import Button from '../../Button/Button';
-import './Post.css';
+import Button from "../../Button/Button";
+import "./Post.css";
 
-const post = props => (
+const post = (props) => (
   <article className="post">
     <header className="post__header">
       <h3 className="post__meta">
@@ -16,7 +16,7 @@ const post = props => (
     </div>
     <div className="post__content">{props.content}</div> */}
     <div className="post__actions">
-      <Button mode="flat" link={props.id}>
+      <Button mode="flat" link={props._id}>
         View
       </Button>
       <Button mode="flat" onClick={props.onStartEdit}>
