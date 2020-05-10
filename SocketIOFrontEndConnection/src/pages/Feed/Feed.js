@@ -40,6 +40,11 @@ class Feed extends Component {
       .catch(this.catchError);
 
     this.loadPosts();
+
+    // you need to define the url of the server where you've established your socket.io server and
+    // that of course is our backend server address.
+    //So it's http localhost 8080,
+
     openSocket("http://localhost:8080");
   }
 
