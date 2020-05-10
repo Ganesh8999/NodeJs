@@ -7,15 +7,25 @@ const multer = require("multer");
 
 const feedRoutes = require("./routes/feed");
 const authRoutes = require("./routes/auth");
+const uuidv4 = require("uuid-v4");
 
 const app = express();
 
+// const fileStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, new Date().toISOString() + "-" + file.originalname);
+//   },
+// });
+
 const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: function (req, file, cb) {
     cb(null, "images");
   },
-  filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+  filename: function (req, file, cb) {
+    cb(null, uuidv4());
   },
 });
 

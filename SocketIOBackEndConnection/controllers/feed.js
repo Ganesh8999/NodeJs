@@ -5,6 +5,7 @@ const { validationResult } = require("express-validator/check");
 
 const Post = require("../models/post");
 const User = require("../models/user");
+const io = require("../socket");
 
 exports.getPosts = async (req, res, next) => {
   const currentPage = req.query.page || 1;
@@ -12,6 +13,7 @@ exports.getPosts = async (req, res, next) => {
   try {
     const totalItems = await Post.find().countDocuments();
     const posts = await Post.find()
+      .populate("creator")
       .skip((currentPage - 1) * perPage)
       .limit(perPage);
 
@@ -29,6 +31,8 @@ exports.getPosts = async (req, res, next) => {
 };
 
 exports.createPost = async (req, res, next) => {
+  const imageUrl = req.file.path.replace("\\", "/");
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed, entered data is incorrect.");
@@ -40,7 +44,6 @@ exports.createPost = async (req, res, next) => {
     error.statusCode = 422;
     throw error;
   }
-  const imageUrl = req.file.path;
   const title = req.body.title;
   const content = req.body.content;
   const post = new Post({
@@ -55,6 +58,10 @@ exports.createPost = async (req, res, next) => {
     const user = await User.findById(req.userId);
     user.posts.push(post);
     await user.save();
+    io.getIO().emit("posts", {
+      action: "create",
+      post: { ...post.doc, creator: { _id: req.userId, name: user.name } },
+    });
     res.status(201).json({
       message: "Post created successfully!",
       post: post,
@@ -96,7 +103,9 @@ exports.updatePost = async (req, res, next) => {
   }
   const title = req.body.title;
   const content = req.body.content;
-  let imageUrl = req.body.image;
+  // const  imageUrl = req.body.image;
+  const imageUrl = req.file.path.replace("\\", "/");
+
   if (req.file) {
     imageUrl = req.file.path;
   }
