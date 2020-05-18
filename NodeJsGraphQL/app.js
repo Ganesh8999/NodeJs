@@ -11,6 +11,7 @@ const graphqlResolver = require("./graphql/resolver");
 const uuidv4 = require("uuid-v4");
 
 const app = express();
+const auth = require("./middleware/auth");
 
 // const fileStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
@@ -61,6 +62,8 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+app.use(auth);
 
 app.use(
   "/graphql",
