@@ -1,0 +1,9 @@
+{
+  "env": {
+    "MONGO_USER": "nodeg",
+    "MONGO_PASSWORD": "nodeg",
+    "MONGO_DEFAULT_DATABASE": "shop",
+    "PORT": "",
+    "STRIPE_KEY": "sk_test_QttNMo3OnwARHJqHj7BFYRuU00GBhTduMp"
+  }
+}
