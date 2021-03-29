@@ -9,6 +9,7 @@
   "author": "Ganesh Singh",
   "license": "ISC",
   "devDependencies": {
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "sinon": "^10.0.0"
   }
 }
